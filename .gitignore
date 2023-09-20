@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+coverage
+.vscode
+.idea
+.history
+.TODO
+yarn-error.log
+*.log
+.env
