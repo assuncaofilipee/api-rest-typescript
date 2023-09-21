@@ -1,4 +1,4 @@
-FROM node:gallium-alpine
+FROM node:gallium-alpine as production
 WORKDIR /app
 
 COPY package*.json yarn.lock ./

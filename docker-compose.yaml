@@ -8,7 +8,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app
-    command: sh -c 'yarn install --frozen-lockfile && yarn build && yarn dev'
+    command: sh -c 'yarn install && yarn build && yarn dev'
     ports:
       - ${APP_PORT}:${APP_PORT}
     environment:
@@ -21,8 +21,10 @@ services:
       DB_POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       DB_POSTGRES_NAME: ${DB_POSTGRES_NAME}
     depends_on:
+      - postgres
       - cache
     links:
+      - postgres
       - cache
     networks:
       - sharedNetwork 
@@ -36,8 +38,9 @@ services:
       POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: ${DB_POSTGRES_NAME}
     ports:
-      - '${DB_POSTGRES_PORT}:${DB_POSTGRES_PORT}'
-    command: -p ${DB_POSTGRES_PORT}
+      - ${DB_POSTGRES_PORT}:${DB_POSTGRES_PORT}
+    networks:
+      - sharedNetwork 
 
   cache:
     image: redis:alpine
