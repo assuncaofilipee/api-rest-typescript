@@ -36,10 +36,8 @@ services:
       POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
       POSTGRES_DB: ${DB_POSTGRES_NAME}
     ports:
-      - ${DB_POSTGRES_PORT}:${DB_POSTGRES_PORT}
+      - '${DB_POSTGRES_PORT}:${DB_POSTGRES_PORT}'
     command: -p ${DB_POSTGRES_PORT}
-    networks:
-      - sharedNetwork
 
   cache:
     image: redis:alpine

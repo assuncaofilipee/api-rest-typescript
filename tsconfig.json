@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "CommonJS",
+    "types": ["node", "reflect-metadata"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowJs": true,
