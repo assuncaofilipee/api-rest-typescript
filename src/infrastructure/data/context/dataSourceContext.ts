@@ -4,7 +4,7 @@ import Logger from '../log/logger';
 
 export default class DataSourceContext {
   constructor() {
-    process.on('SIGINT', this.#disconnect).on('SIGTERM', this.#disconnect);
+    process.on('SIGINT', this.disconnect).on('SIGTERM', this.disconnect);
   }
 
   datasource?: DataSource;
@@ -21,7 +21,7 @@ export default class DataSourceContext {
       Logger.debug(`Connected to database on ${this.constructor.name}!`);
     } catch (error) {
       if (error instanceof Error) {
-        Logger.debug('Error connecting to PostgreSQL server', {
+        Logger.error('Error connecting to PostgreSQL server', {
           error: error.message
         });
 
@@ -30,7 +30,7 @@ export default class DataSourceContext {
     }
   };
 
-  #disconnect = async (): Promise<void> => {
+  private disconnect = async (): Promise<void> => {
     if (this.datasource) {
       await this.datasource.destroy();
 

@@ -1,6 +1,4 @@
 import { DependencyContainer, instanceCachingFactory } from 'tsyringe';
-// import HealthCheckRepositoryInterface from './domain/interfaces/repositories/healthCheckRepositoryInterface';
-// import PostgresHealthCheckRepository from './infrastructure/data/repositories/postgresHealthCheckRepository';
 import DataSourceContext from './infrastructure/data/context/dataSourceContext';
 import Logger from './infrastructure/data/log/logger';
 const registerDependencies = async (
@@ -17,13 +15,6 @@ const registerDependencies = async (
     'EntityManager',
     databaseConnection.datasource!.manager
   );
-
-  // container.register<HealthCheckRepositoryInterface>(
-  //   'HealthCheckRepositoryInterface',
-  //   {
-  //     useClass: PostgresHealthCheckRepository
-  //   }
-  // );
 };
 
 export default async (container: DependencyContainer): Promise<void> => {
