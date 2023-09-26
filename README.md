@@ -1,6 +1,18 @@
 
 # API REST TYPESCRIPT
 
+* [DESCRIÇÃO DO PROJETO](#descrição-do-projeto)
+* [TECNOLOGIAS](#tecnologias)
+* [ARQUITETURA](#arquitetura)
+* [DESIGN PATTERNS](#design-patterns)
+* [REGRAS DE NEGÓCIO](#regras-de-negócio)
+* [ENTIDADE RELACIONAMENTO NORMA 3N](#entidade-relacionamento-norma-3n)
+* [PRÉ REQUISITOS PARA RODAR LOCALMENTE](#pré-requisitos-para-rodar-localmente)
+* [COMO EXECUTAR A APLICAÇÃO](#como-executar-a-aplicação)
+* [DOCUMENTAÇÃO VIA SWAGGER](#documentação-via-swagger)
+
+### DESCRIÇÃO DO PROJETO
+
 Projeto criado para comprovação de conhecimento em desenvolvimento **backend** na tecnologia Nodejs com Typescript.
 
 O projeto consiste em uma API REST com as seguintes funcionalidades:
@@ -21,7 +33,6 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * RabbitMQ
 * PostgresSQL
 * Swagger
-
 
 ### ARQUITETURA
 
@@ -71,3 +82,8 @@ docker-compose up --build
 
 Pronto!
 
+### DOCUMENTAÇÃO VIA SWAGGER
+
+http://localhost:3000/api-docs/
+
+continua...
