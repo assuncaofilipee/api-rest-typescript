@@ -2,7 +2,9 @@ import { DependencyContainer, instanceCachingFactory } from 'tsyringe';
 import DataSourceContext from './infrastructure/data/context/dataSourceContext';
 import Logger from './infrastructure/data/log/logger';
 import HealthCheckRepositoryInterface from './domain/interfaces/repositories/healthCheckRepositoryInterface';
-import PostgresHealthCheckRepository from './infrastructure/data/repositories/healthCheckRepository';
+import PostgresHealthCheckRepository from './infrastructure/data/repositories/postgresHealthCheckRepository';
+import SubjectRepositoryInterface from './domain/interfaces/repositories/subjectRepositoryInterface';
+import PostgresSubjectRepository from './infrastructure/data/repositories/postgresSubjectRepository';
 const registerDependencies = async (
   container: DependencyContainer
 ): Promise<void> => {
@@ -22,6 +24,13 @@ const registerDependencies = async (
     'HealthCheckRepositoryInterface',
     {
       useClass: PostgresHealthCheckRepository
+    }
+  );
+
+  container.register<SubjectRepositoryInterface>(
+    'SubjectRepositoryInterface',
+    {
+      useClass: PostgresSubjectRepository
     }
   );
 };

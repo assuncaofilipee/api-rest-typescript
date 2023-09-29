@@ -18,6 +18,25 @@ export class Course {
 
   @Column({ type: "text", nullable: true })
   description: string;
+  
+  @Column({
+    name: 'created_at',
+    type: 'timestamptz'
+  })
+  createdAt: Date;
+
+  @Column({
+    name: 'updated_at',
+    type: 'timestamptz'
+  })
+  updatedAt: Date;
+
+  @Column({
+    name: 'deleted_at',
+    type: 'timestamptz',
+    nullable: true
+  })
+  deletedAt?: Date;
 
   @OneToMany(() => Video, (video) => video.course)
   videos: Video[];
