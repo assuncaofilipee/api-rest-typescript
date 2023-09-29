@@ -8,6 +8,6 @@ export default class HealthCheckController {
     Logger.debug('healthCheckController - getStatusAPI - healthCheckService');
     const healthCheckService = container.resolve(HealthCheckService);
     const result = await healthCheckService.checkStatusAPI();
-    response.status(200).json({ data: result });
+    return response.status(200).json({ data: result });
   }
 }

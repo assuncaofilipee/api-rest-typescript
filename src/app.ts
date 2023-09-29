@@ -5,6 +5,7 @@ import Logger from './infrastructure/data/log/logger';
 import dependencyContainer from './dependencyContainer';
 import healthCheckRoute from './api/routes/v1/healthCheckRoute';
 import swaggerRoute from './api/routes/v1/swaggerRoute';
+import subjectRoute from './api/routes/v1/subjectRoute';
 
 export default class App {
   public express: express.Application = express();
@@ -13,6 +14,7 @@ export default class App {
   public async start(port: number, appName: string): Promise<void> {
     await this.dependencyContainer();
 
+    this.express.use(express.json());
     await this.routes();
     
     this.express.listen(port, '0.0.0.0', async () => {
@@ -29,6 +31,7 @@ export default class App {
 
     this.express.use(await healthCheckRoute());
     this.express.use(await swaggerRoute());
+    this.express.use(await subjectRoute());
 
     Logger.info('Routes initialized!');
   }

@@ -19,6 +19,25 @@ export class Video {
   @Column({ type: "text" })
   url: string;
 
+  @Column({
+    name: 'created_at',
+    type: 'timestamptz'
+  })
+  createdAt: Date;
+
+  @Column({
+    name: 'updated_at',
+    type: 'timestamptz'
+  })
+  updatedAt: Date;
+
+  @Column({
+    name: 'deleted_at',
+    type: 'timestamptz',
+    nullable: true
+  })
+  deletedAt?: Date;
+
   @ManyToOne(() => Course, (course) => course.videos)
   @JoinColumn({ name: "room_id" })
   course: Course;
