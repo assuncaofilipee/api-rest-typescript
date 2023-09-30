@@ -4,6 +4,7 @@ import Logger from '../../infrastructure/data/log/logger';
 import { validationResult } from 'express-validator';
 import SubjectService from '../../application/services/subjectService';
 import { Subject } from '../../domain/entities/subject';
+import { created, ok, serverError, unprocessableEntity } from '../helpers/httpHelper';
 
 @injectable()
 export default class SubjectController {
@@ -23,16 +24,13 @@ export default class SubjectController {
       const offset = Number(request.query.offset) || 0;
       const result = await this.subjectService.get(limit, offset);
 
-      return response.status(200).json({
+      return ok(response, {
         data: result.subjects,
         pagination: result.pagination
       });
     } catch (error) {
       Logger.error(`subjectController - get - error: ${error}`);
-      if (error instanceof Error) {
-        return response.status(400).json({ error: error.message });
-      }
-      return response.status(500).send('Internal Server Error');
+      return serverError(response);
     }
   };
 
@@ -41,18 +39,15 @@ export default class SubjectController {
       Logger.debug('subjectController - save - validate payload');
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
-        return response.status(422).send(schemaErrors.array());
+        return unprocessableEntity(response, schemaErrors);
       }
       Logger.debug('subjectController - save - SubjectService');
       const subject = new Subject(request.body);
       const result = await this.subjectService.save(subject);
-      return response.status(201).json({ data: result });
+      return created(response, { data: result });
     } catch (error) {
       Logger.error(`subjectController - save - error: ${error}`);
-      if (error instanceof Error) {
-        return response.status(400).json({ error: error.message });
-      }
-      return response.status(500).send('Internal Server Error');
+      return serverError(response);
     }
   };
 }
