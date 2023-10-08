@@ -1,22 +1,33 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import VideoInterface from "../interfaces/entities/video";
 import { Course } from "./course";
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity("videos")
-export class Video {
+export class Video implements VideoInterface {
+  constructor(video: VideoInterface) {
+    if (video) {
+      this.id = video.id ?? uuidv4();
+      this.title = video.title?.trim();
+      this.url = video.url?.trim();
+      this.createdAt = new Date();
+      this.updatedAt = new Date();
+    }
+  }
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "varchar", length: 150 })
   title: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "varchar", length: 150 })
   url: string;
 
   @Column({
@@ -31,14 +42,13 @@ export class Video {
   })
   updatedAt: Date;
 
-  @Column({
+  @DeleteDateColumn({
     name: 'deleted_at',
-    type: 'timestamptz',
-    nullable: true
+    type: 'timestamptz'
   })
   deletedAt?: Date;
 
   @ManyToOne(() => Course, (course) => course.videos)
-  @JoinColumn({ name: "room_id" })
+  @JoinColumn({ name: "course_id" })
   course: Course;
 }

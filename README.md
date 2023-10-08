@@ -1,15 +1,15 @@
 
 # API REST TYPESCRIPT
 
-* [DESCRIÇÃO DO PROJETO](#descrição-do-projeto)
-* [TECNOLOGIAS](#tecnologias)
-* [ARQUITETURA](#arquitetura)
-* [DESIGN PATTERNS](#design-patterns)
-* [REGRAS DE NEGÓCIO](#regras-de-negócio)
-* [ENTIDADE RELACIONAMENTO NORMA 3N](#entidade-relacionamento-norma-3n)
-* [PRÉ REQUISITOS PARA RODAR LOCALMENTE](#pré-requisitos-para-rodar-localmente)
-* [COMO EXECUTAR A APLICAÇÃO](#como-executar-a-aplicação)
-* [DOCUMENTAÇÃO VIA SWAGGER](#documentação-via-swagger)
+* [Descrição do projeto](#descrição-do-projeto)
+* [Tecnologias](#tecnologias)
+* [Arquitetura](#arquitetura)
+* [Design Patterns](#design-patterns)
+* [Regras de Negócio](#regras-de-negócio)
+* [Entidade Relacionamento norma 3n](#entidade-relacionamento-norma-3n)
+* [Pré requisitos para rodar localmente](#pré-requisitos-para-rodar-localmente)
+* [Como executar a aplicação](#como-executar-a-aplicação)
+* [Documentação via swagger](#documentação-via-swagger)
 
 ### DESCRIÇÃO DO PROJETO
 
@@ -49,15 +49,15 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * Idéia principal: API para cadastro de cursos vinculados a videos e assuntos;
 
 * Cadastro de cursos (courses)
-    * Cada curso precisa estar vinculado a um ou mais assuntos (subjects);
-    * Cada curso precisa estar vinculado a um ou mais videos;
+    * Cada curso precisa estar vinculado a um assuntos (subjects);
+    * Cada curso precisa estar vinculado a zero ou mais videos;
 * Cadastro de videos
   * Cada video precisa estar vinculado a um curso;
 * Cadastro de assuntos (subjects)
-  * Cada assunto precisa estar vinculado a um ou mais cursos;
+  * Cada assunto precisa estar vinculado a zero ou mais cursos;
 ### ENTIDADE RELACIONAMENTO NORMA 3N
 
-<img src="assets/ER.png" width="400">
+<img src="assets/ER_DB.png" width="400">
 
 ### PRÉ REQUISITOS PARA RODAR LOCALMENTE
 

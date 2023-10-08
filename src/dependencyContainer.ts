@@ -5,6 +5,10 @@ import HealthCheckRepositoryInterface from './domain/interfaces/repositories/hea
 import PostgresHealthCheckRepository from './infrastructure/data/repositories/postgresHealthCheckRepository';
 import SubjectRepositoryInterface from './domain/interfaces/repositories/subjectRepositoryInterface';
 import PostgresSubjectRepository from './infrastructure/data/repositories/postgresSubjectRepository';
+import CourseRepositoryInterface from './domain/interfaces/repositories/courseRepositoryInterface';
+import PostgresCourseRepository from './infrastructure/data/repositories/postgresCourseRepository';
+import VideoRepositoryInterface from './domain/interfaces/repositories/videoRepositoryInterface';
+import PostgresVideoRepository from './infrastructure/data/repositories/postgresVideoRepository';
 const registerDependencies = async (
   container: DependencyContainer
 ): Promise<void> => {
@@ -31,6 +35,20 @@ const registerDependencies = async (
     'SubjectRepositoryInterface',
     {
       useClass: PostgresSubjectRepository
+    }
+  );
+
+  container.register<CourseRepositoryInterface>(
+    'CourseRepositoryInterface',
+    {
+      useClass: PostgresCourseRepository
+    }
+  );
+
+  container.register<VideoRepositoryInterface>(
+    'VideoRepositoryInterface',
+    {
+      useClass: PostgresVideoRepository
     }
   );
 };
