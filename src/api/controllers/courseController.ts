@@ -2,8 +2,6 @@ import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
 import Logger from "../../infrastructure/data/log/logger";
 import { validationResult } from "express-validator";
-import SubjectService from "../../application/services/subjectService";
-import { Subject } from "../../domain/entities/subject";
 import {
   created,
   noContent,
@@ -12,11 +10,15 @@ import {
   serverError,
   unprocessableEntity,
 } from "../helpers/httpHelper";
+import CourseService from "../../application/services/courseService";
 import { EntityNotFoundError } from "typeorm";
+import SubjectService from "../../application/services/subjectService";
 
 @injectable()
-export default class SubjectController {
+export default class CourseController {
   constructor(
+    @inject(CourseService)
+    public readonly courseService: CourseService,
     @inject(SubjectService)
     public readonly subjectService: SubjectService
   ) {}
@@ -24,20 +26,22 @@ export default class SubjectController {
   save = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - save - body params: ${JSON.stringify(
-          request.body
-        )}`
+        `courseController - save - body params: ${JSON.stringify(request.body)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectController - save - SubjectService");
-      const subject = new Subject(request.body);
-      const result = await this.subjectService.save(subject);
+
+      Logger.debug("courseController - save - courseService");
+      const result = await this.courseService.save(request);
+      
       return created(response, { data: result });
     } catch (error) {
-      Logger.error(`subjectController - save - error: ${error}`);
+      Logger.error(`courseController - save - error: ${error}`);
+      if (error instanceof EntityNotFoundError) {
+        return notFound(response, error.message);
+      }
       return serverError(response);
     }
   };
@@ -45,20 +49,20 @@ export default class SubjectController {
   find = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - find - query params: ${JSON.stringify(
+        `courseController - find - query params: ${JSON.stringify(
           request.query
         )}`
       );
       const limit = Number(request.query.limit) || 20;
       const offset = Number(request.query.offset) || 0;
-      const result = await this.subjectService.find(limit, offset);
+      const result = await this.courseService.find(limit, offset);
 
       return ok(response, {
-        data: result.subjects,
+        data: result.courses,
         pagination: result.pagination,
       });
     } catch (error) {
-      Logger.error(`subjectController - get - error: ${error}`);
+      Logger.error(`courseController - find - error: ${error}`);
       return serverError(response);
     }
   };
@@ -66,7 +70,7 @@ export default class SubjectController {
   update = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - update - body params: ${JSON.stringify(
+        `courseController - update - body params: ${JSON.stringify(
           request.body
         )}`
       );
@@ -74,15 +78,15 @@ export default class SubjectController {
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-
-      Logger.debug("subjectController - subjectService - update");
-      const result = await this.subjectService.update(request);
-
+    
+      Logger.debug("courseController - CourseService - update");
+      const result = await this.courseService.update(request);
+      
       return ok(response, result);
     } catch (error) {
-      Logger.error(`subjectController - save - error: ${error}`);
+      Logger.error(`courseController - save - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, "Course not found");
       }
       return serverError(response);
     }
@@ -91,7 +95,7 @@ export default class SubjectController {
   delete = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - delete - id: ${JSON.stringify(
+        `courseController - delete - id: ${JSON.stringify(
           request.params.id
         )}`
       );
@@ -99,14 +103,15 @@ export default class SubjectController {
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectService - courseController - delete");
-      await this.subjectService.delete(request.params.id);
+
+      Logger.debug("courseController - courseService - delete");
+      await this.courseService.delete(request.params.id);
 
       return noContent(response);
     } catch (error) {
-      Logger.error(`subjectController - delete - error: ${error}`);
+      Logger.error(`courseController - delete - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, "Course not found");
       }
       return serverError(response);
     }

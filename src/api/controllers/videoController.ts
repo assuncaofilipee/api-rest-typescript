@@ -2,8 +2,6 @@ import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
 import Logger from "../../infrastructure/data/log/logger";
 import { validationResult } from "express-validator";
-import SubjectService from "../../application/services/subjectService";
-import { Subject } from "../../domain/entities/subject";
 import {
   created,
   noContent,
@@ -12,32 +10,32 @@ import {
   serverError,
   unprocessableEntity,
 } from "../helpers/httpHelper";
+import VideoService from "../../application/services/videoService";
+import { Video } from "../../domain/entities/video";
 import { EntityNotFoundError } from "typeorm";
 
 @injectable()
-export default class SubjectController {
+export default class VideoController {
   constructor(
-    @inject(SubjectService)
-    public readonly subjectService: SubjectService
+    @inject(VideoService)
+    public readonly videoService: VideoService
   ) {}
 
   save = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - save - body params: ${JSON.stringify(
-          request.body
-        )}`
+        `videoController - save - body params: ${JSON.stringify(request.body)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectController - save - SubjectService");
-      const subject = new Subject(request.body);
-      const result = await this.subjectService.save(subject);
+      Logger.debug("videoController - videoService - save");
+      const result = await this.videoService.save(request);
+
       return created(response, { data: result });
     } catch (error) {
-      Logger.error(`subjectController - save - error: ${error}`);
+      Logger.error(`videoController - save - error: ${error}`);
       return serverError(response);
     }
   };
@@ -45,20 +43,22 @@ export default class SubjectController {
   find = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - find - query params: ${JSON.stringify(
+        `videoController - find - query params: ${JSON.stringify(
           request.query
         )}`
       );
       const limit = Number(request.query.limit) || 20;
       const offset = Number(request.query.offset) || 0;
-      const result = await this.subjectService.find(limit, offset);
+
+      Logger.debug("videoController - videoService - find");
+      const result = await this.videoService.find(limit, offset);
 
       return ok(response, {
-        data: result.subjects,
+        data: result.videos,
         pagination: result.pagination,
       });
     } catch (error) {
-      Logger.error(`subjectController - get - error: ${error}`);
+      Logger.error(`videoController - find - error: ${error}`);
       return serverError(response);
     }
   };
@@ -66,7 +66,7 @@ export default class SubjectController {
   update = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - update - body params: ${JSON.stringify(
+        `videoController - update - body params: ${JSON.stringify(
           request.body
         )}`
       );
@@ -75,14 +75,14 @@ export default class SubjectController {
         return unprocessableEntity(response, schemaErrors);
       }
 
-      Logger.debug("subjectController - subjectService - update");
-      const result = await this.subjectService.update(request);
+      Logger.debug("videoController - VideoService - update");
+      const result = await this.videoService.update(request);
 
       return ok(response, result);
     } catch (error) {
-      Logger.error(`subjectController - save - error: ${error}`);
+      Logger.error(`videoController - save - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, "Video not found");
       }
       return serverError(response);
     }
@@ -91,7 +91,7 @@ export default class SubjectController {
   delete = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - delete - id: ${JSON.stringify(
+        `videoController - delete - id: ${JSON.stringify(
           request.params.id
         )}`
       );
@@ -99,14 +99,15 @@ export default class SubjectController {
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectService - courseController - delete");
-      await this.subjectService.delete(request.params.id);
+
+      Logger.debug("videoController- videoService - delete");
+      await this.videoService.delete(request.params.id);
 
       return noContent(response);
     } catch (error) {
-      Logger.error(`subjectController - delete - error: ${error}`);
+      Logger.error(`videoController - delete - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, "Video not found");
       }
       return serverError(response);
     }

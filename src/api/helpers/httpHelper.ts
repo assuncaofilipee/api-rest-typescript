@@ -1,4 +1,4 @@
-import { Response, response } from "express";
+import { Response, response } from 'express';
 
 export const ok = (response: Response, data: any): Response => {
   return response.status(200).send(data);
@@ -16,7 +16,10 @@ export const badRequest = (error: Error): Response => {
   return response.status(400).send(error);
 };
 
-export const unprocessableEntity = (response: Response, error: any): Response => {
+export const unprocessableEntity = (
+  response: Response,
+  error: any
+): Response => {
   return response.status(422).send(error);
 };
 
@@ -25,9 +28,13 @@ export const forbidden = (response: Response, error: Error): Response => {
 };
 
 export const unauthorized = (response: Response, error: Error): Response => {
-  return response.status(401).send('Unauthorized');
+  return response.status(401).send({ errors: 'Unauthorized' });
+};
+
+export const notFound = (response: Response, error: string): Response => {
+  return response.status(404).send({ errors: error });
 };
 
 export const serverError = (response: Response): Response => {
-  return response.status(500).send({errors: 'Internal Server Error'});
+  return response.status(500).send({ errors: 'Internal Server Error' });
 };

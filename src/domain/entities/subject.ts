@@ -1,17 +1,19 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Course } from "./course";
 import SubjectInterface from "../interfaces/entities/subject";
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity("subjects")
 export class Subject implements SubjectInterface{
   constructor(subject: SubjectInterface) {
     if (subject) {
+      this.id = subject.id ?? uuidv4();
       this.name = subject.name?.trim();
       this.createdAt = new Date();
       this.updatedAt = new Date();
@@ -20,7 +22,7 @@ export class Subject implements SubjectInterface{
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "varchar", length: 150 })
   name: string;
 
   @Column({
@@ -35,24 +37,12 @@ export class Subject implements SubjectInterface{
   })
   updatedAt: Date;
 
-  @Column({
+  @DeleteDateColumn({
     name: 'deleted_at',
-    type: 'timestamptz',
-    nullable: true
+    type: 'timestamptz'
   })
-  deletedAt?: Date ;
+  deletedAt?: Date;
 
-  @ManyToMany(() => Course, (course) => course.subjects)
-  @JoinTable({
-    name: "course_subject",
-    joinColumn: {
-      name: "course_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "subject_id",
-      referencedColumnName: "id",
-    },
-  })
-  courses: Course[];
+  @OneToMany(() => Course, (course) => course.subject)
+  courses?: Course[];
 }
