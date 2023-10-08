@@ -36,9 +36,17 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 
 ### ARQUITETURA
 
-* Clean Architecture:
+#### Clean Architecture:
 
-<img src="assets/CLEAN-ARCH.png" width="400">
+<img src="assets/architecture.png" width="800">
+
+* **Adptadores de interface:** Contém os apresentadores, visualizações, controladores e adaptadores que convertem os dados no formato que é mais conveniente para os casos de uso e entidades ou para o formato mais conveniente para algum agente externo (por exemplo a web).
+
+* **Regras de Negócio da Aplicação:** Reúne e implementa todos os casos de uso do sistema, onde estes orquestram o fluxo de dados para e a partir das entidades e orientam essas entidades na aplicação das Regras Cruciais de Negócios a fim de atingir os objetivos do caso de uso.
+
+* **Regras de Negócio da Empresa:** As entidades reúnem as Regras Cruciais de Negócios da empresa inteira, podem ser um objeto contendo métodos ou um conjunto de estrutura de dados e funções. Mas o mais importante é que as entidades possam ser usadas por muitas aplicações diferentes na empresa.
+
+* **Frameworks & Drivers:** A camada mais externa da figura acima, é geralmente composta de frameworks e ferramentas como a base de dados, framework web, logs, etc. 
 
 ### DESIGN PATTERNS
 
@@ -57,7 +65,7 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
   * Cada assunto precisa estar vinculado a um ou mais cursos;
 ### ENTIDADE RELACIONAMENTO NORMA 3N
 
-<img src="assets/ER.png" width="400">
+<img src="assets/ER_DB.png" width="400">
 
 ### PRÉ REQUISITOS PARA RODAR LOCALMENTE
 
