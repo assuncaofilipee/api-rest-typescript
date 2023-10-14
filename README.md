@@ -6,7 +6,7 @@
 * [Arquitetura](#arquitetura)
 * [Design Patterns](#design-patterns)
 * [Regras de Negócio](#regras-de-negócio)
-* [Entidade Relacionamento norma 3n](#entidade-relacionamento-norma-3n)
+* [Banco de dados](#banco-de-dados)
 * [Pré requisitos para rodar localmente](#pré-requisitos-para-rodar-localmente)
 * [Como executar a aplicação](#como-executar-a-aplicação)
 * [Documentação via swagger](#documentação-via-swagger)
@@ -63,7 +63,11 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
   * Cada video precisa estar vinculado a um curso;
 * Cadastro de assuntos (subjects)
   * Cada assunto precisa estar vinculado a um ou mais cursos;
-### ENTIDADE RELACIONAMENTO NORMA 3N
+
+### Banco de dados
+  Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
+  Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" e salva, remove e carrega objetos usando repositórios.
+#### ENTIDADE RELACIONAMENTO NORMA 3N
 
 <img src="assets/ER_DB.png" width="400">
 
