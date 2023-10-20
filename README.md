@@ -57,18 +57,18 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * Idéia principal: API para cadastro de cursos vinculados a videos e assuntos;
 
 * Cadastro de cursos (courses)
-    * Cada curso precisa estar vinculado a um ou mais assuntos (subjects);
-    * Cada curso precisa estar vinculado a um ou mais videos;
+    * Cada curso precisa estar vinculado a um assuntos (subjects);
+    * Cada curso precisa estar vinculado a zero ou mais videos;
 * Cadastro de videos
   * Cada video precisa estar vinculado a um curso;
 * Cadastro de assuntos (subjects)
-  * Cada assunto precisa estar vinculado a um ou mais cursos;
-
+* Cada assunto precisa estar vinculado a zero ou mais cursos;
+* 
 ### Banco de dados
   Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
   Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" e salva, remove e carrega objetos usando repositórios.
+  
 #### ENTIDADE RELACIONAMENTO NORMA 3N
-
 <img src="assets/ER_DB.png" width="400">
 
 ### PRÉ REQUISITOS PARA RODAR LOCALMENTE
