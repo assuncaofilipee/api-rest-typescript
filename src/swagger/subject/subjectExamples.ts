@@ -27,7 +27,7 @@ export default {
       active: true,
       createdAt: "2023-08-03T11:42:45.577Z",
       updatedAt: "2023-08-03T11:42:45.577Z",
-      deletedAt: null
+      deletedAt: null,
     },
-  },
+  }
 };

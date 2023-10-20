@@ -9,6 +9,9 @@ import CourseRepositoryInterface from './domain/interfaces/repositories/courseRe
 import PostgresCourseRepository from './infrastructure/data/repositories/postgresCourseRepository';
 import VideoRepositoryInterface from './domain/interfaces/repositories/videoRepositoryInterface';
 import PostgresVideoRepository from './infrastructure/data/repositories/postgresVideoRepository';
+import { RedisClientType, createClient } from 'redis';
+import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
+import CacheSourceContext from './infrastructure/cache/cacheSourceContext';
 const registerDependencies = async (
   container: DependencyContainer
 ): Promise<void> => {
@@ -51,6 +54,19 @@ const registerDependencies = async (
       useClass: PostgresVideoRepository
     }
   );
+
+  container.register<RedisClientType>('RedisClient', {
+    useFactory: instanceCachingFactory(() => {
+      return createClient({
+        url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+        password: `${process.env.REDIS_PASSWORD}`
+      }) as RedisClientType;
+    })
+  });
+
+  container.register<CacheMemoryInterface>('CacheMemoryInterface', {
+    useClass: CacheSourceContext
+  });
 };
 
 

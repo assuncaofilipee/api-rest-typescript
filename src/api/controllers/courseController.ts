@@ -13,6 +13,8 @@ import {
 import CourseService from "../../application/services/courseService";
 import { EntityNotFoundError } from "typeorm";
 import SubjectService from "../../application/services/subjectService";
+import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
+import { CourseServiceOutput } from "../../domain/interfaces/services/course/courseServiceOutput";
 
 @injectable()
 export default class CourseController {
@@ -20,7 +22,9 @@ export default class CourseController {
     @inject(CourseService)
     public readonly courseService: CourseService,
     @inject(SubjectService)
-    public readonly subjectService: SubjectService
+    public readonly subjectService: SubjectService,
+    @inject("CacheMemoryInterface")
+    private readonly cacheMemory: CacheMemoryInterface
   ) {}
 
   save = async (request: Request, response: Response): Promise<Response> => {
@@ -35,7 +39,7 @@ export default class CourseController {
 
       Logger.debug("courseController - save - courseService");
       const result = await this.courseService.save(request);
-      
+
       return created(response, { data: result });
     } catch (error) {
       Logger.error(`courseController - save - error: ${error}`);
@@ -48,14 +52,31 @@ export default class CourseController {
 
   find = async (request: Request, response: Response): Promise<Response> => {
     try {
+      const limit = Number(request.query.limit) || 20;
+      const offset = Number(request.query.offset) || 0;
+      const cacheKey = `courses:all:${limit}:${offset}`;
+      const cachedCourses = await this.cacheMemory.getter(cacheKey);
+
+      if (cachedCourses) {
+        const result = JSON.parse(cachedCourses);
+        return ok(response, {
+          data: result.courses,
+          pagination: result.pagination,
+        });
+      }
+
       Logger.debug(
         `courseController - find - query params: ${JSON.stringify(
           request.query
         )}`
       );
-      const limit = Number(request.query.limit) || 20;
-      const offset = Number(request.query.offset) || 0;
       const result = await this.courseService.find(limit, offset);
+
+      await this.cacheMemory.setter(
+        cacheKey,
+        JSON.stringify(result),
+        parseInt(process.env.DATA_CACHE_EXPIRATION_IN_SECONDS!, 10)
+      );
 
       return ok(response, {
         data: result.courses,
@@ -78,10 +99,10 @@ export default class CourseController {
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-    
+
       Logger.debug("courseController - CourseService - update");
       const result = await this.courseService.update(request);
-      
+
       return ok(response, result);
     } catch (error) {
       Logger.error(`courseController - save - error: ${error}`);
@@ -95,9 +116,7 @@ export default class CourseController {
   delete = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `courseController - delete - id: ${JSON.stringify(
-          request.params.id
-        )}`
+        `courseController - delete - id: ${JSON.stringify(request.params.id)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {

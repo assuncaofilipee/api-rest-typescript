@@ -84,12 +84,4 @@ export default {
       },
     },
   },
-  GenericSubjectError: {
-    type: "object",
-    properties: {
-      errors: {
-        type: "string",
-      },
-    },
-  },
 };

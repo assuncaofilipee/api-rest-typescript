@@ -45,7 +45,7 @@ export default {
             examples: {
               GenericRoleError: {
                 value: {
-                  errors: 'Internal Server Error'
+                  error: 'Internal Server Error'
                 }
               },
             },

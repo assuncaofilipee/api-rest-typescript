@@ -8,6 +8,7 @@ import swaggerRoute from './api/routes/v1/swaggerRoute';
 import subjectRoute from './api/routes/v1/subjectRoute';
 import courseRoute from './api/routes/v1/courseRoute';
 import videoRoute from './api/routes/v1/videoRoute';
+import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
 
 export default class App {
   public express: express.Application = express();
@@ -15,10 +16,11 @@ export default class App {
 
   public async start(port: number, appName: string): Promise<void> {
     await this.dependencyContainer();
+    await this.connectToRedis();
 
     this.express.use(express.json());
     await this.routes();
-    
+
     this.express.listen(port, '0.0.0.0', async () => {
       Logger.info(`The ${appName} service is running on port ${port}!`);
     });
@@ -39,4 +41,11 @@ export default class App {
 
     Logger.info('Routes initialized!');
   }
+
+  private connectToRedis = async (): Promise<void> => {
+    const redis: CacheMemoryInterface = container.resolve(
+      'CacheMemoryInterface'
+    );
+    await redis.connect();
+  };
 }

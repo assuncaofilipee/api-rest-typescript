@@ -37,17 +37,11 @@ export default {
           "application/json": {
             schema: {
               type: "object",
-              properties: {
-                error: {
-                  type: "string",
-                },
-              },
+              $ref: "#/components/schemas/UnprocessableGenerictError",
             },
             examples: {
-              GenericRoleError: {
-                value: {
-                  errors: 'Internal Server Error'
-                }
+              subject: {
+                $ref: "#/components/examples/UnprocessableGenericError",
               },
             },
           },
@@ -68,7 +62,7 @@ export default {
             examples: {
               GenericRoleError: {
                 value: {
-                  errors: 'Internal Server Error'
+                  error: 'Internal Server Error'
                 }
               },
             },
