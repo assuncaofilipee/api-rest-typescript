@@ -7,5 +7,6 @@ export default interface CacheMemoryInterface {
     expireTime: number
   ): Promise<string | null>;
   delete(key: string): Promise<void>;
+  deleteAllPrefix(prefix: string): Promise<void>;
   updateExpirationDate(key: string, seconds: number): Promise<void>;
 }

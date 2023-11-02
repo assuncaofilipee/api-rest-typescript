@@ -10,18 +10,16 @@ import {
   serverError,
   unprocessableEntity,
 } from "../helpers/httpHelper";
-import CourseService from "../../application/services/courseService";
 import { EntityNotFoundError } from "typeorm";
-import SubjectService from "../../application/services/subjectService";
 import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
+import UserService from "../../application/services/userService";
+import { UnprocessableError } from "../helpers/appError";
 
 @injectable()
-export default class CourseController {
+export default class UserController {
   constructor(
-    @inject(CourseService)
-    public readonly courseService: CourseService,
-    @inject(SubjectService)
-    public readonly subjectService: SubjectService,
+    @inject(UserService)
+    public readonly userService: UserService,
     @inject("CacheMemoryInterface")
     private readonly cacheMemory: CacheMemoryInterface
   ) {}
@@ -29,23 +27,27 @@ export default class CourseController {
   save = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `courseController - save - body params: ${JSON.stringify(request.body)}`
+        `userController - save - body params: ${JSON.stringify(request.body)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
 
-      Logger.debug("courseController - save - courseService");
-      const result = await this.courseService.save(request);
+      Logger.debug("userController - save - userService");
+      const result = await this.userService.save(request);
 
-      await this.cacheMemory.deleteAllPrefix('courses:all*');
+      await this.cacheMemory.deleteAllPrefix('users:all*');
 
       return created(response, { data: result });
     } catch (error) {
-      Logger.error(`courseController - save - error: ${error}`);
+      Logger.error(`userController - save - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
         return notFound(response, error.message);
+      }
+
+      if (error instanceof UnprocessableError) {
+        return unprocessableEntity(response, {"errors" : [{"message":error.message}]});
       }
       return serverError(response);
     }
@@ -55,23 +57,23 @@ export default class CourseController {
     try {
       const limit = Number(request.query.limit) || 20;
       const offset = Number(request.query.offset) || 0;
-      const cacheKey = `courses:all:${limit}:${offset}`;
+      const cacheKey = `users:all:${limit}:${offset}`;
       const cached = await this.cacheMemory.getter(cacheKey);
 
       if (cached) {
         const result = JSON.parse(cached);
         return ok(response, {
-          data: result.courses,
+          data: result.users,
           pagination: result.pagination,
         });
       }
 
       Logger.debug(
-        `courseController - find - query params: ${JSON.stringify(
+        `userController - find - query params: ${JSON.stringify(
           request.query
         )}`
       );
-      const result = await this.courseService.find(limit, offset);
+      const result = await this.userService.find(limit, offset);
 
       await this.cacheMemory.setter(
         cacheKey,
@@ -80,11 +82,11 @@ export default class CourseController {
       );
 
       return ok(response, {
-        data: result.courses,
+        data: result.users,
         pagination: result.pagination,
       });
     } catch (error) {
-      Logger.error(`courseController - find - error: ${error}`);
+      Logger.error(`userController - find - error: ${error}`);
       return serverError(response);
     }
   };
@@ -92,7 +94,7 @@ export default class CourseController {
   update = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `courseController - update - body params: ${JSON.stringify(
+        `userController - update - body params: ${JSON.stringify(
           request.body
         )}`
       );
@@ -101,14 +103,14 @@ export default class CourseController {
         return unprocessableEntity(response, schemaErrors);
       }
 
-      Logger.debug("courseController - CourseService - update");
-      const result = await this.courseService.update(request);
+      Logger.debug("userController - userService - update");
+      const result = await this.userService.update(request);
 
-      await this.cacheMemory.deleteAllPrefix('courses:all*');
+      await this.cacheMemory.deleteAllPrefix('users:all*');
 
       return ok(response, result);
     } catch (error) {
-      Logger.error(`courseController - save - error: ${error}`);
+      Logger.error(`userController - save - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
         return notFound(response, "Course not found");
       }
@@ -119,21 +121,21 @@ export default class CourseController {
   delete = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `courseController - delete - id: ${JSON.stringify(request.params.id)}`
+        `userController - delete - id: ${JSON.stringify(request.params.id)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
 
-      Logger.debug("courseController - courseService - delete");
-      await this.courseService.delete(request.params.id);
+      Logger.debug("userController - userService - delete");
+      await this.userService.delete(request.params.id);
 
-      await this.cacheMemory.deleteAllPrefix('courses:all*');
-      
+      await this.cacheMemory.deleteAllPrefix('users:all*');
+
       return noContent(response);
     } catch (error) {
-      Logger.error(`courseController - delete - error: ${error}`);
+      Logger.error(`userController - delete - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
         return notFound(response, "Course not found");
       }

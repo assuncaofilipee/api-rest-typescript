@@ -98,4 +98,21 @@ export default class CacheSourceContext implements CacheMemoryInterface {
       }
     }
   };
+
+  deleteAllPrefix = async (prefix: string): Promise<void> => {
+    try {
+      const keys = await this.redisClient.keys(prefix);
+      keys.map(async key => {
+        await this.redisClient.del(key);
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        Logger.error('Error deleting value to redis server', {
+          error: error.message
+        });
+
+        throw error;
+      }
+    }
+  };
 }
