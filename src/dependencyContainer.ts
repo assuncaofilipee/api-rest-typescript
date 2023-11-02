@@ -12,6 +12,8 @@ import PostgresVideoRepository from './infrastructure/data/repositories/postgres
 import { RedisClientType, createClient } from 'redis';
 import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
 import CacheSourceContext from './infrastructure/cache/cacheSourceContext';
+import UserRepositoryInterface from './domain/interfaces/repositories/userRepositoryInterface';
+import PostgresUserRepository from './infrastructure/data/repositories/postgresUserRepository';
 const registerDependencies = async (
   container: DependencyContainer
 ): Promise<void> => {
@@ -52,6 +54,13 @@ const registerDependencies = async (
     'VideoRepositoryInterface',
     {
       useClass: PostgresVideoRepository
+    }
+  );
+
+  container.register<UserRepositoryInterface>(
+    'UserRepositoryInterface',
+    {
+      useClass: PostgresUserRepository
     }
   );
 

@@ -9,6 +9,7 @@ import subjectRoute from './api/routes/v1/subjectRoute';
 import courseRoute from './api/routes/v1/courseRoute';
 import videoRoute from './api/routes/v1/videoRoute';
 import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
+import userRoute from './api/routes/v1/userRoute';
 
 export default class App {
   public express: express.Application = express();
@@ -38,6 +39,7 @@ export default class App {
     this.express.use(await subjectRoute());
     this.express.use(await courseRoute());
     this.express.use(await videoRoute());
+    this.express.use(await userRoute());
 
     Logger.info('Routes initialized!');
   }
