@@ -27,7 +27,7 @@ export const forbidden = (response: Response, error: Error): Response => {
   return response.status(403).send(error);
 };
 
-export const unauthorized = (response: Response, error: Error): Response => {
+export const unauthorized = (response: Response): Response => {
   return response.status(401).send({ error: 'Unauthorized' });
 };
 

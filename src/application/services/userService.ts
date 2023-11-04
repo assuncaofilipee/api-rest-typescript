@@ -33,9 +33,7 @@ export default class UserService {
   };
 
   save = async (request: Request): Promise<UserInterface> => {
-    let user = new User(request.body);
-    const hash = await bcrypt.hash(user.password, 10);
-    user.password = hash;
+    const user = new User(request.body);
 
     if(await this.findOneByEmail(user.email)) {
        throw new UnprocessableError("User already exists");

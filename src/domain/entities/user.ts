@@ -3,9 +3,12 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  BeforeInsert,
+  BeforeUpdate
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import UserInterface from "../interfaces/entities/user";
+import bcrypt from 'bcryptjs';
 
 @Entity("users")
 export class User implements UserInterface {
@@ -48,4 +51,10 @@ export class User implements UserInterface {
     type: "timestamptz",
   })
   deletedAt?: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassowrd() {
+    this.password = bcrypt.hashSync(this.password, 8);
+  }
 }

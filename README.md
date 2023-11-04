@@ -68,7 +68,7 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
   Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
   Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" e salva, remove e carrega objetos usando repositórios.
   
-#### ENTIDADE RELACIONAMENTO NORMA 3N
+#### ENTIDADE RELACIONAMENTO
 <img src="assets/ER_DB.png" width="400">
 
 ### PRÉ REQUISITOS PARA RODAR LOCALMENTE
