@@ -17,9 +17,8 @@ Projeto criado para comprovação de conhecimento em desenvolvimento **backend**
 
 O projeto consiste em uma API REST com as seguintes funcionalidades:
 
-* Operações CRUD em cima de um domínio referente a cursos, videos e conteúdos como regra de negocio;
-* Autenticação via JWT;
-* Verificação de refresh token com Redis;
+* Operações CRUD em cima de um domínio referente a cursos, videos e conteúdos como regra de negocio; 
+* Autenticação via token JWT;
 * Cache com Redis;
 * Disparo de notificações via fila (RabbitMQ);
 
@@ -62,11 +61,11 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * Cadastro de videos
   * Cada video precisa estar vinculado a um curso;
 * Cadastro de assuntos (subjects)
-* Cada assunto precisa estar vinculado a zero ou mais cursos;
-* 
+  * Cada assunto precisa estar vinculado a zero ou mais cursos;
+
 ### Banco de dados
   Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
-  Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" e salva, remove e carrega objetos usando repositórios.
+  Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" onde salva, remove e carrega objetos usando repositórios.
   
 #### ENTIDADE RELACIONAMENTO
 <img src="assets/ER_DB.png" width="400">
