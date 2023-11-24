@@ -11,6 +11,7 @@ import videoRoute from './api/routes/v1/videoRoute';
 import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
 import userRoute from './api/routes/v1/userRoute';
 import authRoute from './api/routes/v1/authRoute';
+import NotificationInterface from './domain/interfaces/notification/notificationInterface';
 
 export default class App {
   public express: express.Application = express();
@@ -19,6 +20,7 @@ export default class App {
   public async start(port: number, appName: string): Promise<void> {
     await this.dependencyContainer();
     await this.connectToRedis();
+    await this.connectToNotification();
 
     this.express.use(express.json());
     await this.routes();
@@ -51,5 +53,12 @@ export default class App {
       'CacheMemoryInterface'
     );
     await redis.connect();
+  };
+
+  private connectToNotification = async (): Promise<void> => {
+    const notification: NotificationInterface = container.resolve(
+      'NotificationInterface'
+    );
+    await notification.connect();
   };
 }
