@@ -14,6 +14,10 @@ import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface
 import CacheSourceContext from './infrastructure/cache/cacheSourceContext';
 import UserRepositoryInterface from './domain/interfaces/repositories/userRepositoryInterface';
 import PostgresUserRepository from './infrastructure/data/repositories/postgresUserRepository';
+import NotificationInterface from './domain/interfaces/notification/notificationInterface';
+import NotificationSourceContext from './infrastructure/notification/notificationSourceContext';
+import client, { Channel, Connection } from 'amqplib';
+
 const registerDependencies = async (
   container: DependencyContainer
 ): Promise<void> => {
@@ -61,6 +65,19 @@ const registerDependencies = async (
     'UserRepositoryInterface',
     {
       useClass: PostgresUserRepository
+    }
+  );
+
+  container.register<Connection>('RabbitmqClient', {
+    useFactory: instanceCachingFactory(() => {
+     return client.connect('amqp://username:password@rabbitmq:5672') as unknown as Connection;
+    })
+  });
+
+  container.register<NotificationInterface>(
+    'NotificationInterface',
+    {
+      useClass: NotificationSourceContext
     }
   );
 
