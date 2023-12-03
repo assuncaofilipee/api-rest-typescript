@@ -11,7 +11,6 @@ export default async (): Promise<Router> => {
   router.use("/v1/users", router);
   router.post(
     "",
-    authMiddleware,
     userControllerRequestValidation.saveUserRequestValidation,
     userController.save
   );

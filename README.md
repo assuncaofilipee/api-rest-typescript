@@ -37,7 +37,7 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 
 #### Clean Architecture:
 
-<img src="assets/architecture.png" width="800">
+<img src="assets/clean-architecture.png" width="800">
 
 * **Adptadores de interface:** Contém os apresentadores, visualizações, controladores e adaptadores que convertem os dados no formato que é mais conveniente para os casos de uso e entidades ou para o formato mais conveniente para algum agente externo (por exemplo a web).
 
@@ -63,12 +63,16 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * Cadastro de assuntos (subjects)
   * Cada assunto precisa estar vinculado a zero ou mais cursos;
 
-### Banco de dados
+### BANCO DE DADOS
   Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
   Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" onde salva, remove e carrega objetos usando repositórios.
   
 #### ENTIDADE RELACIONAMENTO
 <img src="assets/ER_DB.png" width="400">
+
+#### MENSAGERIA
+Afim de demonstrar conhecimento sobre o tópico, foi desenvolvido uma fila de comunicação onde, a cada curso criado, é enviado uma mensagem a essa fila com as informações do mesmo.
+O cenário ideal seria ter um projeto consumidor separado, porém para fins de demonstrar meu conhecimento na tecnologia Rabbitmq optei por deixar o consumidor no mesmo projeto, onde o mesmo lê as informações enviadas à fila e exibe no terminal.
 
 ### PRÉ REQUISITOS PARA RODAR LOCALMENTE
 
