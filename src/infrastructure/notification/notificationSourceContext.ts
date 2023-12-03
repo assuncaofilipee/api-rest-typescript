@@ -1,11 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 import Logger from '../data/log/logger';
 import NotificationInterface from '../../domain/interfaces/notification/notificationInterface';
-import client, { Channel, Connection, ConsumeMessage } from 'amqplib';
+import { Channel, Connection, ConsumeMessage } from 'amqplib';
 
 
 @injectable()
 export default class NotificationSourceContext implements NotificationInterface {
+  private channel: Channel;
+
   constructor(
     @inject('RabbitmqClient')
     private readonly rabbitmqClient: Connection
@@ -15,10 +17,8 @@ export default class NotificationSourceContext implements NotificationInterface 
     try {
       Logger.debug('Rabbitmq connection is successfully');
       const connection: Connection = await this.rabbitmqClient;
-      const channel: Channel = await connection.createChannel();
-      await channel.assertQueue('myQueue');
-      this.sendMessages(channel);
-      await channel.consume('myQueue', this.consumer(channel));
+      this.channel = await connection.createChannel();
+      await this.channel.consume('myQueue', this.consumer());
     } catch (error) {
       if (error instanceof Error) {
         Logger.error('Error connecting to Rabbitmq server', {
@@ -29,16 +29,17 @@ export default class NotificationSourceContext implements NotificationInterface 
     }
   };
 
-  sendMessages (channel: Channel): void {
-    for (let i =0; i < 10; i++) {
-      channel.sendToQueue('myQueue', Buffer.from(`message ${i}`));
-    }
+  sendMessages = async(message: string): Promise<void> => {
+    const connection: Connection = await this.rabbitmqClient;
+    this.channel = await connection.createChannel();
+    this.channel.sendToQueue('myQueue', Buffer.from(message));
+    this.channel.close();
   }
 
-  consumer = (channel: Channel) => (msg: ConsumeMessage | null): void => {
+  consumer = () => (msg: ConsumeMessage | null): void => {
     if(msg) {
       console.log(msg.content.toString());
-      channel.ack(msg);
+      this.channel.ack(msg);
     }
   }
 }

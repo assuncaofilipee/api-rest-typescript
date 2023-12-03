@@ -14,6 +14,7 @@ import CourseService from "../../application/services/courseService";
 import { EntityNotFoundError } from "typeorm";
 import SubjectService from "../../application/services/subjectService";
 import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
+import NotificationInterface from "../../domain/interfaces/notification/notificationInterface";
 
 @injectable()
 export default class CourseController {
@@ -23,7 +24,9 @@ export default class CourseController {
     @inject(SubjectService)
     public readonly subjectService: SubjectService,
     @inject("CacheMemoryInterface")
-    private readonly cacheMemory: CacheMemoryInterface
+    private readonly cacheMemory: CacheMemoryInterface,
+    @inject("NotificationInterface")
+    private readonly notification: NotificationInterface
   ) {}
 
   save = async (request: Request, response: Response): Promise<Response> => {
@@ -41,6 +44,7 @@ export default class CourseController {
 
       await this.cacheMemory.deleteAllPrefix('courses:all*');
 
+      this.notification.sendMessages(`New course: ${JSON.stringify(result)}`);
       return created(response, { data: result });
     } catch (error) {
       Logger.error(`courseController - save - error: ${error}`);
