@@ -5,6 +5,9 @@ export default {
       "Esta rota é responsável por criar um assunto (subject).",
     tags: ["Subjects"],
     parameters: [],
+    security: [{
+      Authorization: []
+    }],
     requestBody: {
       content: {
         'application/json': {

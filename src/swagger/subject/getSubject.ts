@@ -5,6 +5,9 @@ export default {
       "Esta rota é responsável por consultar todos os assuntos (subjects).",
     tags: ["Subjects"],
     parameters: [],
+    security: [{
+      Authorization: []
+    }],
     responses: {
       200: {
         description: "OK",
