@@ -4,6 +4,9 @@ export default {
     description:
       'Esta rota é responsável por alterar os dados de um assunto.',
     tags: ['Subjects'],
+    security: [{
+      Authorization: []
+    }],
     requestBody: {
       content: {
         'application/json': {
