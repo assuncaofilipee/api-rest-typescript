@@ -10,7 +10,7 @@ import { Request } from "express";
 export default class SubjectService {
   constructor(
     @inject('SubjectRepositoryInterface')
-    private readonly postgresSubjectRepository: SubjectRepositoryInterface
+    public readonly postgresSubjectRepository: SubjectRepositoryInterface
   ) {}
 
   find = async (limit: number, offset: number): Promise<SubjectServiceOutput> => {
@@ -28,14 +28,14 @@ export default class SubjectService {
     return this.postgresSubjectRepository.save(subject);
   };
 
-  update = async (request: Request): Promise<SubjectInterface> => {
+  update = async (id: string, name: string): Promise<SubjectInterface> => {
     Logger.debug('subjectService - postgresSubjectRepository - findOneById');
     const subject = await this.findOneById(
-      request.params.id
+      id
     );
 
     Object.assign(subject!, {
-      name: request.body?.name ?? subject?.name
+      name: name
     });
 
     Logger.debug('subjectService - postgresSubjectRepository - save');

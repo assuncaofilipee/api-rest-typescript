@@ -17,7 +17,7 @@ export default class App {
   public express: express.Application = express();
 
 
-  public async start(port: number, appName: string): Promise<void> {
+  public async initialize(): Promise<void> {
     await this.dependencyContainer();
     await this.connectToRedis();
     await this.connectToNotification();
@@ -25,6 +25,9 @@ export default class App {
     this.express.use(express.json());
     await this.routes();
 
+  };
+
+  public async start(port: number, appName: string): Promise<void> {
     this.express.listen(port, '0.0.0.0', async () => {
       Logger.info(`The ${appName} service is running on port ${port}!`);
     });

@@ -6,7 +6,7 @@ import { Subject } from "../../../domain/entities/subject";
 import SubjectInterface from "../../../domain/interfaces/entities/subject";
 
 @injectable()
-export default class PostgresSubjectRepository
+export default class SubjectRepository
   implements SubjectRepositoryInterface
 {
   private subjectRepository: Repository<subjectInterface>;

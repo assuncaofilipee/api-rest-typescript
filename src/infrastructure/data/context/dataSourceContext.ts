@@ -30,7 +30,7 @@ export default class DataSourceContext {
     }
   };
 
-  private disconnect = async (): Promise<void> => {
+  public disconnect = async (): Promise<void> => {
     if (this.datasource) {
       await this.datasource.destroy();
 

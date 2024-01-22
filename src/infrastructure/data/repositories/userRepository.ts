@@ -5,7 +5,7 @@ import UserInterface from "../../../domain/interfaces/entities/user";
 import { User } from "../../../domain/entities/user";
 
 @injectable()
-export default class PostgresUserRepository
+export default class UserRepository
   implements UserRepositoryInterface
 {
   private userRepository: Repository<UserInterface>;
