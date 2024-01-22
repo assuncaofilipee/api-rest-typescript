@@ -98,6 +98,7 @@ docker-compose up --build
 Pronto!
 
 ### DOCUMENTAÇÃO VIA SWAGGER
+<img src="assets/documentation.png" width="800">
 
 http://localhost:3000/api-docs/
 

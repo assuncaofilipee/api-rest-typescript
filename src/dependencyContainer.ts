@@ -2,21 +2,21 @@ import { DependencyContainer, instanceCachingFactory } from 'tsyringe';
 import DataSourceContext from './infrastructure/data/context/dataSourceContext';
 import Logger from './infrastructure/data/log/logger';
 import HealthCheckRepositoryInterface from './domain/interfaces/repositories/healthCheckRepositoryInterface';
-import PostgresHealthCheckRepository from './infrastructure/data/repositories/postgresHealthCheckRepository';
+import HealthCheckRepository from './infrastructure/data/repositories/healthCheckRepository';
 import SubjectRepositoryInterface from './domain/interfaces/repositories/subjectRepositoryInterface';
-import PostgresSubjectRepository from './infrastructure/data/repositories/postgresSubjectRepository';
+import SubjectRepository from './infrastructure/data/repositories/subjectRepository';
 import CourseRepositoryInterface from './domain/interfaces/repositories/courseRepositoryInterface';
-import PostgresCourseRepository from './infrastructure/data/repositories/postgresCourseRepository';
+import CourseRepository from './infrastructure/data/repositories/courseRepository';
 import VideoRepositoryInterface from './domain/interfaces/repositories/videoRepositoryInterface';
-import PostgresVideoRepository from './infrastructure/data/repositories/postgresVideoRepository';
+import VideoRepository from './infrastructure/data/repositories/videoRepository';
 import { RedisClientType, createClient } from 'redis';
 import CacheMemoryInterface from './domain/interfaces/cache/cacheMemoryInterface';
 import CacheSourceContext from './infrastructure/cache/cacheSourceContext';
 import UserRepositoryInterface from './domain/interfaces/repositories/userRepositoryInterface';
-import PostgresUserRepository from './infrastructure/data/repositories/postgresUserRepository';
 import NotificationInterface from './domain/interfaces/notification/notificationInterface';
 import NotificationSourceContext from './infrastructure/notification/notificationSourceContext';
 import client, { Channel, Connection } from 'amqplib';
+import UserRepository from './infrastructure/data/repositories/userRepository';
 
 const registerDependencies = async (
   container: DependencyContainer
@@ -36,35 +36,35 @@ const registerDependencies = async (
   container.register<HealthCheckRepositoryInterface>(
     'HealthCheckRepositoryInterface',
     {
-      useClass: PostgresHealthCheckRepository
+      useClass: HealthCheckRepository
     }
   );
 
   container.register<SubjectRepositoryInterface>(
     'SubjectRepositoryInterface',
     {
-      useClass: PostgresSubjectRepository
+      useClass: SubjectRepository
     }
   );
 
   container.register<CourseRepositoryInterface>(
     'CourseRepositoryInterface',
     {
-      useClass: PostgresCourseRepository
+      useClass: CourseRepository
     }
   );
 
   container.register<VideoRepositoryInterface>(
     'VideoRepositoryInterface',
     {
-      useClass: PostgresVideoRepository
+      useClass: VideoRepository
     }
   );
 
   container.register<UserRepositoryInterface>(
     'UserRepositoryInterface',
     {
-      useClass: PostgresUserRepository
+      useClass: UserRepository
     }
   );
 

@@ -1,24 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "lib": ["es5", "es6", "ES2018"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "CommonJS",
-    "types": ["node", "reflect-metadata"],
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "allowJs": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "types": ["node", "reflect-metadata", "jest"],
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
-  "ts-node": {
-    "files": true
-  }  
+  "exclude": [
+    "tests",
+    "jest.config.ts",
+  ]
 }

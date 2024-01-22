@@ -18,6 +18,7 @@ export default class NotificationSourceContext implements NotificationInterface 
       Logger.debug('Rabbitmq connection is successfully');
       const connection: Connection = await this.rabbitmqClient;
       this.channel = await connection.createChannel();
+      this.channel.assertQueue('myQueue');
       await this.channel.consume('myQueue', this.consumer());
     } catch (error) {
       if (error instanceof Error) {

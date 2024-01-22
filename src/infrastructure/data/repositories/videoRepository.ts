@@ -5,7 +5,7 @@ import VideoRepositoryInterface from "../../../domain/interfaces/repositories/vi
 import { Video } from "../../../domain/entities/video";
 
 @injectable()
-export default class PostgresVideoRepository
+export default class VideoRepository
   implements VideoRepositoryInterface
 {
   private videoRepository: Repository<VideoInterface>;

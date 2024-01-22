@@ -5,7 +5,7 @@ import CourseInterface from "../../../domain/interfaces/entities/course";
 import { Course } from "../../../domain/entities/course";
 
 @injectable()
-export default class PostgresCourseRepository
+export default class CourseRepository
   implements CourseRepositoryInterface
 {
   private courseRepository: Repository<CourseInterface>;

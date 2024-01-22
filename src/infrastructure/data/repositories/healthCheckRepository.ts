@@ -3,7 +3,7 @@ import { EntityManager } from "typeorm";
 import HealthCheckRepositoryInterface from "../../../domain/interfaces/repositories/healthCheckRepositoryInterface";
 
 @injectable()
-export default class PostgresHealthCheckRepository
+export default class HealthCheckRepository
   implements HealthCheckRepositoryInterface
 {
   constructor(

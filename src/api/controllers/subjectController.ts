@@ -1,27 +1,27 @@
-import { inject, injectable } from "tsyringe";
-import { Request, Response } from "express";
-import Logger from "../../infrastructure/data/log/logger";
-import { validationResult } from "express-validator";
-import SubjectService from "../../application/services/subjectService";
-import { Subject } from "../../domain/entities/subject";
+import { inject, injectable } from 'tsyringe';
+import { Request, Response } from 'express';
+import Logger from '../../infrastructure/data/log/logger';
+import { validationResult } from 'express-validator';
+import SubjectService from '../../application/services/subjectService';
+import { Subject } from '../../domain/entities/subject';
 import {
   created,
   noContent,
   notFound,
   ok,
   serverError,
-  unprocessableEntity,
-} from "../helpers/httpHelper";
-import { EntityNotFoundError } from "typeorm";
-import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
+  unprocessableEntity
+} from '../helpers/httpHelper';
+import { EntityNotFoundError } from 'typeorm';
+import CacheMemoryInterface from '../../domain/interfaces/cache/cacheMemoryInterface';
 
 @injectable()
 export default class SubjectController {
   constructor(
     @inject(SubjectService)
     public readonly subjectService: SubjectService,
-    @inject("CacheMemoryInterface")
-    private readonly cacheMemory: CacheMemoryInterface
+    @inject('CacheMemoryInterface')
+    public readonly cacheMemory: CacheMemoryInterface
   ) {}
 
   save = async (request: Request, response: Response): Promise<Response> => {
@@ -35,7 +35,7 @@ export default class SubjectController {
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectController - save - SubjectService");
+      Logger.debug('subjectController - save - SubjectService');
       const subject = new Subject(request.body);
       const result = await this.subjectService.save(subject);
 
@@ -64,7 +64,7 @@ export default class SubjectController {
         const result = JSON.parse(cached);
         return ok(response, {
           data: result.subjects,
-          pagination: result.pagination,
+          pagination: result.pagination
         });
       }
 
@@ -83,7 +83,7 @@ export default class SubjectController {
 
       return ok(response, {
         data: result.subjects,
-        pagination: result.pagination,
+        pagination: result.pagination
       });
     } catch (error) {
       Logger.error(`subjectController - find - error: ${error}`);
@@ -103,16 +103,19 @@ export default class SubjectController {
         return unprocessableEntity(response, schemaErrors);
       }
 
-      Logger.debug("subjectController - subjectService - update");
-      const result = await this.subjectService.update(request);
+      Logger.debug('subjectController - subjectService - update');
+      const result = await this.subjectService.update(
+        request.params.id,
+        request.body.name
+      );
 
       await this.cacheMemory.deleteAllPrefix('subjects:all*');
 
-      return ok(response, result);
+      return ok(response, {data: result});
     } catch (error) {
       Logger.error(`subjectController - save - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, 'Subject not found');
       }
       return serverError(response);
     }
@@ -121,15 +124,13 @@ export default class SubjectController {
   delete = async (request: Request, response: Response): Promise<Response> => {
     try {
       Logger.debug(
-        `subjectController - delete - id: ${JSON.stringify(
-          request.params.id
-        )}`
+        `subjectController - delete - id: ${JSON.stringify(request.params.id)}`
       );
       const schemaErrors = validationResult(request);
       if (!schemaErrors.isEmpty()) {
         return unprocessableEntity(response, schemaErrors);
       }
-      Logger.debug("subjectService - courseController - delete");
+      Logger.debug('subjectService - courseController - delete');
       await this.subjectService.delete(request.params.id);
 
       await this.cacheMemory.deleteAllPrefix('subjects:all*');
@@ -138,7 +139,7 @@ export default class SubjectController {
     } catch (error) {
       Logger.error(`subjectController - delete - error: ${error}`);
       if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Subject not found");
+        return notFound(response, 'Subject not found');
       }
       return serverError(response);
     }
