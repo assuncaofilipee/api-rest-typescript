@@ -1,13 +1,15 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
-import { Subject } from '../../src/domain/entities/subject';
+import { Video } from '../../src/domain/entities/video';
 import courseFactory from './courseFactory';
 
-export default Factory.define<Subject>(() => {
+export default Factory.define<Video>(() => {
   return {
     id: faker.string.uuid(),
-    name: faker.string.alpha(5),
+    title: faker.string.alpha(5),
+    url: faker.string.alpha(5),
+    course: courseFactory.build(),
     createdAt: faker.date.anytime(),
     updatedAt: faker.date.anytime()
-  }
+  };
 });
