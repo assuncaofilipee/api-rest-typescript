@@ -3,13 +3,11 @@ import { Request, Response } from "express";
 import Logger from "../../infrastructure/data/log/logger";
 import { validationResult } from "express-validator";
 import {
-  notFound,
   ok,
   serverError,
   unauthorized,
   unprocessableEntity,
 } from "../helpers/httpHelper";
-import { EntityNotFoundError } from "typeorm";
 import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
 import UserService from "../../application/services/userService";
 import bcrypt from "bcryptjs";
@@ -59,10 +57,7 @@ export default class AuthController {
 
       return ok(response, { data: { user: user, token: token } });
     } catch (error) {
-      Logger.error(`courseController - save - error: ${error}`);
-      if (error instanceof EntityNotFoundError) {
-        return notFound(response, error.message);
-      }
+      Logger.error(`AuthController - authenticate - error: ${error}`);
       return serverError(response);
     }
   };

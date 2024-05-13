@@ -4,16 +4,20 @@ import subjectSchemas from "./subject/subjectSchemas";
 import subjectExamples from "./subject/subjectExamples";
 import genericSchemas from "./generic/genericSchemas";
 import genericExamples from "./generic/genericExamples";
+import authSchemas from "./auth/authSchemas";
+import authExamples from "./auth/authExamples";
 
 export default {
   components: {
     schemas: {
       ...healthcheckSchemas,
+      ...authSchemas,
       ...subjectSchemas,
       ...genericSchemas,
     },
     examples: {
       ...healthCheckExamples,
+      ...authExamples,
       ...subjectExamples,
       ...genericExamples,
     },

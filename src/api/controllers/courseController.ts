@@ -48,9 +48,6 @@ export default class CourseController {
       return created(response, { data: result });
     } catch (error) {
       Logger.error(`courseController - save - error: ${error}`);
-      if (error instanceof EntityNotFoundError) {
-        return notFound(response, error.message);
-      }
       return serverError(response);
     }
   };
@@ -138,9 +135,6 @@ export default class CourseController {
       return noContent(response);
     } catch (error) {
       Logger.error(`courseController - delete - error: ${error}`);
-      if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Course not found");
-      }
       return serverError(response);
     }
   };

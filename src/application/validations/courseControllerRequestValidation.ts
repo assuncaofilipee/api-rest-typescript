@@ -23,7 +23,8 @@ const updateCourseRequestValidation: ValidationChain[] = [
     .optional()
     .isString()
     .withMessage("Property 'name' cannot be empty")
-    .isLength({ max: 150 })
+    .isLength({ max: 150, min: 3
+     })
     .withMessage("Property 'name' accept 150 caracteres"),
   check("description")
     .optional()
