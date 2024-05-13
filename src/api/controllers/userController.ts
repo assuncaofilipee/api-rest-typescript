@@ -13,7 +13,6 @@ import {
 import { EntityNotFoundError } from "typeorm";
 import CacheMemoryInterface from "../../domain/interfaces/cache/cacheMemoryInterface";
 import UserService from "../../application/services/userService";
-import { UnprocessableError } from "../helpers/appError";
 
 @injectable()
 export default class UserController {
@@ -42,13 +41,6 @@ export default class UserController {
       return created(response, { data: result });
     } catch (error) {
       Logger.error(`userController - save - error: ${error}`);
-      if (error instanceof EntityNotFoundError) {
-        return notFound(response, error.message);
-      }
-
-      if (error instanceof UnprocessableError) {
-        return unprocessableEntity(response, {"errors" : [{"message":error.message}]});
-      }
       return serverError(response);
     }
   };
@@ -136,9 +128,6 @@ export default class UserController {
       return noContent(response);
     } catch (error) {
       Logger.error(`userController - delete - error: ${error}`);
-      if (error instanceof EntityNotFoundError) {
-        return notFound(response, "Course not found");
-      }
       return serverError(response);
     }
   };

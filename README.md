@@ -9,20 +9,21 @@
 * [Banco de dados](#banco-de-dados)
 * [Pré requisitos para rodar localmente](#pré-requisitos-para-rodar-localmente)
 * [Como executar a aplicação](#como-executar-a-aplicação)
+* [Testes](#testes)
 * [Documentação via swagger](#documentação-via-swagger)
 
-### DESCRIÇÃO DO PROJETO
+## DESCRIÇÃO DO PROJETO
 
 Projeto criado para comprovação de conhecimento em desenvolvimento **backend** na tecnologia Nodejs com Typescript.
 
 O projeto consiste em uma API REST com as seguintes funcionalidades:
 
-* Operações CRUD em cima de um domínio referente a cursos, videos e conteúdos como regra de negocio; 
+* Operações CRUD em cima de um domínio referente a cursos, videos e conteúdos como regra de negócio; 
 * Autenticação via token JWT;
 * Cache com Redis;
 * Disparo de notificações via fila (RabbitMQ);
 
-### TECNOLOGIAS
+## TECNOLOGIAS
 
 * NodeJS
 * Typescript
@@ -33,9 +34,9 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * PostgresSQL
 * Swagger
 
-### ARQUITETURA
+## ARQUITETURA
 
-#### Clean Architecture:
+### Clean Architecture:
 
 <img src="assets/clean-architecture.png" width="800">
 
@@ -47,12 +48,12 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 
 * **Frameworks & Drivers:** A camada mais externa da figura acima, é geralmente composta de frameworks e ferramentas como a base de dados, framework web, logs, etc. 
 
-### DESIGN PATTERNS
+## DESIGN PATTERNS
 
 * Aplicado em cima dos conceitos de SOLID;
 * Depencecy Injection via interfaces através do **package ts-ringe**;
 
-### REGRAS DE NEGÓCIO
+## REGRAS DE NEGÓCIO
 * Idéia principal: API para cadastro de cursos vinculados a videos e assuntos;
 
 * Cadastro de cursos (courses)
@@ -63,22 +64,22 @@ O projeto consiste em uma API REST com as seguintes funcionalidades:
 * Cadastro de assuntos (subjects)
   * Cada assunto precisa estar vinculado a zero ou mais cursos;
 
-### BANCO DE DADOS
+## BANCO DE DADOS
   Para o projeto foi escolhido o banco PostgresSQL, onde a sua manipulação será por meio do ORM TypeORM.
   Foi escolhido o padrão Data Mapper para manipulação das entidades, esse padrão permite a consulta em classes separadas chamadas "repositórios" onde salva, remove e carrega objetos usando repositórios.
   
 #### ENTIDADE RELACIONAMENTO
 <img src="assets/ER_DB.png" width="400">
 
-#### MENSAGERIA
+## MENSAGERIA
 Afim de demonstrar conhecimento sobre o tópico, foi desenvolvido uma fila de comunicação onde, a cada curso criado, é enviado uma mensagem a essa fila com as informações do mesmo.
 O cenário ideal seria ter um projeto consumidor separado, porém para fins de demonstrar meu conhecimento na tecnologia Rabbitmq optei por deixar o consumidor no mesmo projeto, onde o mesmo lê as informações enviadas à fila e exibe no terminal.
 
-### PRÉ REQUISITOS PARA RODAR LOCALMENTE
+## PRÉ REQUISITOS PARA RODAR LOCALMENTE
 
 Ter instalado em seu computador docker e docker compose.
 
-### COMO EXECUTAR A APLICAÇÃO
+## COMO EXECUTAR A APLICAÇÃO
 
 Faça o clone do projeto:
 ```bash
@@ -97,9 +98,16 @@ docker-compose up --build
 
 Pronto!
 
-### DOCUMENTAÇÃO VIA SWAGGER
+## TESTES
+
+Para rodar os testes da aplicação execute o comando:
+```bash
+make test
+```
+### Cobertura de testes da aplicação:
+<img src="assets/coverage.png" width="800">
+
+## DOCUMENTAÇÃO VIA SWAGGER
 <img src="assets/documentation.png" width="800">
 
 http://localhost:3000/api-docs/
-
-continua...

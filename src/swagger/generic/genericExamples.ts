@@ -12,4 +12,9 @@ export default {
       ],
     },
   },
+  UnauthorizedError: {
+    value: {
+      error: "Unauthorized"
+    }
+  }
 };

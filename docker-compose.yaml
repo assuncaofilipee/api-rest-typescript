@@ -25,10 +25,12 @@ services:
       - postgres
       - postgres-test
       - cache
+      - rabbitmq
     links:
       - postgres
       - postgres-test
       - cache
+      - rabbitmq
     networks:
       - sharedNetwork 
 

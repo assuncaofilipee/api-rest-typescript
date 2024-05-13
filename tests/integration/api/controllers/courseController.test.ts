@@ -5,8 +5,9 @@ import testDbDefaultManager from '../../../testDbDefaultManager';
 import { EntityManager } from 'typeorm';
 import clearDatabase from '../../../helpers/clearDatabase';
 import { v4 as uuidv4 } from 'uuid';
+import { Subject } from 'typeorm/persistence/Subject.js';
 
-describe('SubjectController Testing', () => {
+describe('CourseController Testing', () => {
   let app: Application;
   const api: App = new App();
   let manager: EntityManager;
@@ -40,43 +41,62 @@ describe('SubjectController Testing', () => {
     manager.connection.destroy();
   });
 
-  it('Should create a subject ', async () => {
+  it('Should create a course ', async () => {
     const expectedStatus = 201;
-    const expectedName = 'test';
+    const expectedName = 'course name';
 
-    const response = await request(app)
+    const subject = await request(app)
       .post('/v1/subjects')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: expectedName });
+      .send({ name: 'test' });
+
+    const response = await request(app)
+      .post('/v1/courses')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: expectedName,
+        description: 'test',
+        subjectId: subject.body.data.id
+      });
 
     const content = response.body.data;
     expect(response.statusCode).toBe(expectedStatus);
     expect(content.name).toBe(expectedName);
   });
 
-  it('Should return unprocessable entity when save empty subject ', async () => {
+  it('Should return unprocessable entity when save empty course ', async () => {
     const expectedStatus = 422;
 
     const response = await request(app)
-      .post('/v1/subjects')
+      .post('/v1/courses')
       .set('Authorization', `Bearer ${token}`)
       .send();
 
     expect(response.statusCode).toBe(expectedStatus);
   });
 
-  it('Should find subject ', async () => {
+  it('Should find course ', async () => {
     const expectedStatus = 200;
 
-    let response = await request(app)
+    const subject = await request(app)
       .post('/v1/subjects')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' });
 
+    let response = await request(app)
+      .post('/v1/courses')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'test',
+        description: 'test',
+        subjectId: subject.body.data.id
+      });
+
+    let course = response.body.data;
+    course['videos'] = [];
+
     const expected = {
-      data: [
-        response.body.data
-      ],
+      data: [course],
       pagination: {
         hasNextPage: false,
         currentPage: 1,
@@ -84,10 +104,10 @@ describe('SubjectController Testing', () => {
         recordPerPage: 20,
         totalRecords: 1
       }
-    }
+    };
 
     response = await request(app)
-      .get('/v1/subjects')
+      .get('/v1/courses')
       .set('Authorization', `Bearer ${token}`)
       .send();
 
@@ -95,86 +115,113 @@ describe('SubjectController Testing', () => {
     expect(response.body).toEqual(expected);
   });
 
-  it('Should update subject ', async () => {
+  it('Should update course ', async () => {
     const expectedStatus = 200;
     const expectedUpadtedName = 'test Upated';
 
-    let response = await request(app)
+    const subject = await request(app)
       .post('/v1/subjects')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' });
 
-    response = await request(app)
-      .put(`/v1/subjects/${response.body.data.id}`)
+    let response = await request(app)
+      .post('/v1/courses')
       .set('Authorization', `Bearer ${token}`)
-      .send({name: expectedUpadtedName});
+      .send({
+        name: 'test',
+        description: 'test',
+        subjectId: subject.body.data.id
+      });
+
+    response = await request(app)
+      .put(`/v1/courses/${response.body.data.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: expectedUpadtedName });
 
     expect(response.statusCode).toBe(expectedStatus);
-    expect(response.body.data.name).toEqual(expectedUpadtedName);
+    expect(response.body.name).toEqual(expectedUpadtedName);
   });
 
-
-  it('Should return unprocessable entity when update subject ', async () => {
+  it('Should return unprocessably entity when update course ', async () => {
     const expectedStatus = 422;
-
-    let response = await request(app)
+  
+    const subject = await request(app)
       .post('/v1/subjects')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' });
 
-    response = await request(app)
-      .put(`/v1/subjects/${response.body.data.id}`)
+    let response = await request(app)
+      .post('/v1/courses')
       .set('Authorization', `Bearer ${token}`)
-      .send();
+      .send({
+        name: 'test',
+        description: 'test',
+        subjectId: subject.body.data.id
+      });
+
+    response = await request(app)
+      .put(`/v1/courses/${response.body.data.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'a' });
 
     expect(response.statusCode).toBe(expectedStatus);
   });
 
-  it('Should return not found entity when update subject ', async () => {
+
+  it('Should return not found entity when update course ', async () => {
     const expectedStatus = 404;
     const randomId = uuidv4();
 
     const response = await request(app)
-      .put(`/v1/subjects/${randomId}`)
+      .put(`/v1/courses/${randomId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' });
 
     expect(response.statusCode).toBe(expectedStatus);
   });
 
-  it('Should delete subject ', async () => {
+  it('Should delete course ', async () => {
     const expectedStatus = 204;
 
-    let response = await request(app)
+    const subject = await request(app)
       .post('/v1/subjects')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' });
 
+    let response = await request(app)
+      .post('/v1/courses')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'test',
+        description: 'test',
+        subjectId: subject.body.data.id
+      });
+
     response = await request(app)
-      .delete(`/v1/subjects/${response.body.data.id}`)
+      .delete(`/v1/courses/${response.body.data.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send();
 
     expect(response.statusCode).toBe(expectedStatus);
   });
 
-  it('Should return unprocessable entity when delete subject ', async () => {
+  it('Should return unprocessable entity when delete course ', async () => {
     const expectedStatus = 422;
 
     const response = await request(app)
-      .delete(`/v1/subjects/invalidId`)
+      .delete(`/v1/courses/invalidId`)
       .set('Authorization', `Bearer ${token}`)
       .send();
 
     expect(response.statusCode).toBe(expectedStatus);
   });
 
-  it('Should return not found entity when delete subject ', async () => {
-    const expectedStatus = 404;
+  it('Should return not content when delete course ', async () => {
+    const expectedStatus = 204;
     const randomId = uuidv4();
 
     const response = await request(app)
-      .delete(`/v1/subjects/${randomId}`)
+      .delete(`/v1/courses/${randomId}`)
       .set('Authorization', `Bearer ${token}`)
       .send();
 

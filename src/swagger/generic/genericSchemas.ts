@@ -14,4 +14,9 @@ export default {
       },
     },
   },
+  UnauthorizedError: {
+    error: {
+      type: "string"
+    }
+  }
 };
