@@ -93,7 +93,7 @@ Preencha as variaveis que necessitam de valores;
 
 Execute o comando:
 ```bash
-docker-compose up --build
+make up
 ```
 
 Pronto!
